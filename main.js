@@ -529,24 +529,21 @@ ipcMain.handle('mods:list-installed', async () => {
 // Launch Minecraft
 // ---------------------------------------------------------------------------
 function libraryIdentity(lib) {
-  const [coordinates] = String(lib.name || '').split('@');
+  const coordinates = String(lib.name || '').split('@')[0];
   const parts = coordinates.split(':');
-  // Version is intentionally omitted: asm:9.6 and asm:9.7.1 are the same artifact.
+  // Omit version so different versions of the same Maven artifact match.
   return parts.length >= 2 ? `${parts[0]}:${parts[1]}:${parts[3] || ''}` : coordinates;
 }
 
 function buildClasspath(vanillaLibs, fabricLibs, libraryRoot) {
-  const fabricIdentities = new Set(fabricLibs.map(libraryIdentity));
-  const byIdentity = new Map();
-  for (const lib of vanillaLibs) {
-    const identity = libraryIdentity(lib);
-    if (!fabricIdentities.has(identity)) byIdentity.set(identity, lib);
-  }
-  // Add Fabric last: its version wins for any artifact with matching group/artifact/classifier.
-  for (const lib of fabricLibs) byIdentity.set(libraryIdentity(lib), lib);
+  const selected = new Map();
+  // Keep the vanilla version unless Fabric explicitly supplies the same artifact.
+  for (const lib of vanillaLibs) selected.set(libraryIdentity(lib), lib);
+  for (const lib of fabricLibs) selected.set(libraryIdentity(lib), lib);
+
   const entries = [];
   const seenPaths = new Set();
-  for (const lib of byIdentity.values()) {
+  for (const lib of selected.values()) {
     const rel = libArtifactPath(lib);
     if (seenPaths.has(rel)) continue;
     seenPaths.add(rel);
