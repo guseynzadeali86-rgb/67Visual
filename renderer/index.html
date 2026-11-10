@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'" />
+  <title>BeeVisual</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ TITLE BAR ============ -->
+<header class="titlebar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+      <polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="none" stroke="url(#g1)" stroke-width="2.6" stroke-linejoin="round"/>
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#FFD166"/><stop offset="100%" stop-color="#FF7A00"/>
+      </linearGradient></defs>
+      <path d="M9 17h14M16 12c-3 0-5 2-5 5s2 5 5 5 5-2 5-5" stroke="#FFB020" stroke-width="0" />
+      <g stroke="#FFB020" fill="none" stroke-width="2" stroke-linecap="round">
+        <path d="M11 14a5 5 0 1 0 0 6" />
+        <path d="M16 12v10M21 14a5 5 0 1 1 0 6" />
+      </g>
+    </svg>
+    <span class="brand-name">BeeVisual</span>
+    <span class="brand-sub">1.21.4 · <b id="fps">60</b> FPS</span>
+  </div>
+  <div class="titlebar-drag"></div>
+  <div class="win-controls">
+    <button class="wc" id="btn-min" title="Свернуть">
+      <svg viewBox="0 0 12 12"><path d="M2 6h8" /></svg>
+    </button>
+    <button class="wc" id="btn-max" title="Развернуть">
+      <svg viewBox="0 0 12 12"><rect x="2.5" y="2.5" width="7" height="7" /></svg>
+    </button>
+    <button class="wc wc-close" id="btn-close" title="Закрыть">
+      <svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6" /></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ============ LAYOUT ============ -->
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <button class="nav-item active" data-page="home">
+      <svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg><span>Играть</span>
+    </button>
+    <button class="nav-item" data-page="mods">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg><span>Моды</span>
+    </button>
+    <button class="nav-item" data-page="visuals">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg><span>Визуалы</span>
+    </button>
+    <button class="nav-item" data-page="news">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h7"/></svg><span>Новости</span>
+    </button>
+    <button class="nav-item" data-page="settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span>Настройки</span>
+    </button>
+
+    <div class="sidebar-spacer"></div>
+
+    <button class="profile-card" id="profile-card">
+      <div class="avatar">SB</div>
+      <div class="profile-info">
+        <strong id="profile-nick">Steve_Bee</strong>
+        <span class="online"><i></i>Онлайн</span>
+      </div>
+    </button>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ===== HOME ===== -->
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-bees" aria-hidden="true">
+          <span class="bee b1"></span><span class="bee b2"></span><span class="bee b3"></span><span class="bee b4"></span>
+        </div>
+
+        <div class="hero-inner">
+          <h1>Победи весь мир<br><em>с BeeVisual</em></h1>
+          <p>Чистая картинка. Лучший визуал. Сладкая победа.</p>
+
+          <button class="play-btn" id="play-btn">
+            <svg viewBox="0 0 24 24" class="play-icon"><path d="M7 4l13 8-13 8z"/></svg>
+            <span id="play-label">ЗАПУСТИТЬ</span>
+          </button>
+
+          <div class="launch-bar" id="launch-bar" hidden>
+            <div class="launch-track"><div class="launch-fill" id="launch-fill"></div></div>
+            <span class="launch-label" id="launch-label">Подготовка…</span>
+          </div>
+        </div>
+
+        <div class="hero-cards">
+          <label class="hero-card">
+            <span>ВЕРСИЯ</span>
+            <div class="hc-row">
+              <b>Minecraft 1.21.4 · Fabric</b>
+              <svg viewBox="0 0 12 8" class="chev"><path d="M1 1l5 5 5-5"/></svg>
+            </div>
+          </label>
+          <label class="hero-card">
+            <span>НИКНЕЙМ</span>
+            <div class="hc-row">
+              <input id="nick-input" maxlength="16" placeholder="Nickname" />
+            </div>
+          </label>
+          <label class="hero-card">
+            <span>ОЗУ</span>
+            <div class="hc-row">
+              <select id="ram-select">
+                <option value="2048">2 ГБ</option>
+                <option value="4096" selected>4 ГБ</option>
+                <option value="6144">6 ГБ</option>
+                <option value="8192">8 ГБ</option>
+                <option value="12288">12 ГБ</option>
+                <option value="16384">16 ГБ</option>
+              </select>
+              <svg viewBox="0 0 12 8" class="chev"><path d="M1 1l5 5 5-5"/></svg>
+            </div>
+          </label>
+        </div>
+
+        <div class="dots"><i class="on"></i><i></i><i></i></div>
+      </div>
+
+      <div class="news-strip">
+        <article class="news-banner grad-fire">
+          <div><h3>Победи весь мир с <b>BeeVisual</b></h3><p>BeeVisual · Лети</p></div>
+          <span class="mini-bee"></span>
+        </article>
+        <article class="news-banner grad-midnight">
+          <div><h3>Лети выше остальных</h3><p>BeeVisual · Побеждай</p></div>
+          <span class="mini-bee"></span>
+        </article>
+        <article class="news-banner grad-amber">
+          <div><h3>Чистая картинка — чистая победа</h3><p>BeeVisual · Жужжи</p></div>
+          <span class="mini-bee"></span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== MODS ===== -->
+    <section class="page" id="page-mods">
+      <div class="page-head">
+        <div>
+          <h2>Моды</h2>
+          <p class="muted">Загрузка напрямую с Modrinth · только Fabric · Minecraft 1.21.4</p>
+        </div>
+        <div class="head-actions">
+          <button class="ghost-btn" id="open-mods-folder">Открыть папку mods</button>
+        </div>
+      </div>
+
+      <div class="tabs-row">
+        <button class="chip-tab active" data-mods-tab="catalog">Каталог</button>
+        <button class="chip-tab" data-mods-tab="installed">Установленные <span class="badge" id="installed-count">0</span></button>
+      </div>
+
+      <div id="mods-catalog">
+        <div class="search-row">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg>
+            <input id="mod-search-input" placeholder="Поиск модов: sodium, iris, fabric api…" />
+          </div>
+          <select id="mod-category" class="select-dark">
+            <option value="">Все категории</option>
+            <option value="optimization">Оптимизация</option>
+            <option value="adventure">Приключения</option>
+            <option value="decoration">Декор</option>
+            <option value="equipment">Снаряжение</option>
+            <option value="worldgen">Генерация</option>
+            <option value="utility">Утилиты</option>
+          </select>
+        </div>
+
+        <div class="mod-grid" id="mod-grid">
+          <div class="empty-state">Нажмите «Найти», чтобы загрузить моды</div>
+        </div>
+        <div class="load-more-row">
+          <button class="ghost-btn" id="load-more">Загрузить ещё</button>
+        </div>
+      </div>
+
+      <div id="mods-installed" hidden>
+        <div class="installed-list" id="installed-list"></div>
+      </div>
+    </section>
+
+    <!-- ===== VISUALS ===== -->
+    <section class="page" id="page-visuals">
+      <div class="page-head">
+        <div>
+          <h2>Визуалы</h2>
+          <p class="muted">Модули BeeVisual — отключены вне игры</p>
+        </div>
+        <span class="pill-warn">Доступно в игре: Right Shift</span>
+      </div>
+
+      <div class="visuals-grid">
+        <div class="vpanel">
+          <header><span>◉ Рендер</span><span class="count">4</span></header>
+          <div class="vrow active"><span>NoRender</span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+          <div class="vcheck"><label><input type="checkbox" checked> Огонь на экране</label></div>
+          <div class="vcheck"><label><input type="checkbox" checked> Тряска камеры</label></div>
+          <div class="vcheck"><label><input type="checkbox"> Тени и туман</label></div>
+          <div class="vrow active"><span>FullBright</span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+          <div class="vrow"><span>BlockOverlay</span><label class="switch"><input type="checkbox"><i></i></label></div>
+          <div class="vrow"><span>HitColor</span><label class="switch"><input type="checkbox"><i></i></label></div>
+        </div>
+
+        <div class="vpanel">
+          <header><span>▤ Анимации</span><span class="count">4</span></header>
+          <div class="vrow active"><span>ViewModel</span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+          <div class="slider-row"><span>Позиция X</span><b>0.35</b></div>
+          <input type="range" class="range" min="-1" max="1" step="0.01" value="0.35">
+          <div class="slider-row"><span>Позиция Y</span><b>-0.10</b></div>
+          <input type="range" class="range" min="-1" max="1" step="0.01" value="-0.1">
+          <div class="slider-row"><span>Позиция Z</span><b>0.20</b></div>
+          <input type="range" class="range" min="-1" max="1" step="0.01" value="0.2">
+          <div class="slider-row"><span>Масштаб</span><b>1.20</b></div>
+          <input type="range" class="range" min="0.5" max="2" step="0.01" value="1.2">
+          <div class="vrow active"><span>Swing Animation</span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+          <div class="vrow"><span>AspectRatio</span><label class="switch"><input type="checkbox"><i></i></label></div>
+          <div class="vrow"><span>Zoom</span><label class="switch"><input type="checkbox"><i></i></label></div>
+        </div>
+
+        <div class="vpanel">
+          <header><span>◎ Мир</span><span class="count">3</span></header>
+          <div class="vrow active"><span>Ambience</span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+          <div class="slider-row"><span>Время суток</span><b>18:00</b></div>
+          <input type="range" class="range" min="0" max="24" step="1" value="18">
+          <div class="slider-row"><span>Погода</span>
+            <select class="select-mini"><option>Ясно</option><option>Дождь</option><option>Гроза</option></select>
+          </div>
+          <div class="vrow"><span>Fog</span><label class="switch"><input type="checkbox"><i></i></label></div>
+          <div class="vrow active"><span>Particles</span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+        </div>
+
+        <div class="vpanel">
+          <header><span>⚙ HUD</span><span class="count">6</span></header>
+          <div class="vrow active"><span>HUD</span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+          <div class="vrow active"><span>Keystrokes</span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+          <div class="vrow"><span>PotionHUD</span><label class="switch"><input type="checkbox"><i></i></label></div>
+          <div class="vrow"><span>ArmorHUD</span><label class="switch"><input type="checkbox"><i></i></label></div>
+          <div class="vrow"><span>Coords</span><label class="switch"><input type="checkbox"><i></i></label></div>
+          <div class="vrow"><span>Crosshair</span><label class="switch"><input type="checkbox"><i></i></label></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== NEWS ===== -->
+    <section class="page" id="page-news">
+      <div class="page-head"><div><h2>Новости</h2><p class="muted">Обновления BeeVisual</p></div></div>
+      <div class="news-grid">
+        <article class="news-card grad-fire"><h3>BeeVisual 1.0 запущен</h3><p>Первый релиз: лаунчер, каталог модов Modrinth, визуалы в стиле пчёл.</p><span class="date">10.11.2026</span></article>
+        <article class="news-card grad-midnight"><h3>Поддержка 1.21.4</h3><p>Полная интеграция Fabric loader 0.16.9 и автоматические зависимости модов.</p><span class="date">09.11.2026</span></article>
+        <article class="news-card grad-amber"><h3>Новые визуалы</h3><p>Слайдеры ViewModel, Particles и Ambience уже в сборке.</p><span class="date">08.11.2026</span></article>
+      </div>
+    </section>
+
+    <!-- ===== SETTINGS ===== -->
+    <section class="page" id="page-settings">
+      <div class="page-head"><div><h2>Настройки</h2><p class="muted">Как BeeVisual запускает игру</p></div></div>
+
+      <div class="settings-grid">
+        <div class="setting-row">
+          <div><b>Путь к Java</b><small id="java-path-text">Автоматически (скачаем Java 21)</small></div>
+          <button class="ghost-btn" id="pick-java">Выбрать</button>
+        </div>
+        <div class="setting-row">
+          <div><b>ОЗУ для игры</b><small>Выделяемая память</small></div>
+          <select id="settings-ram" class="select-dark">
+            <option value="2048">2 ГБ</option><option value="4096">4 ГБ</option>
+            <option value="6144">6 ГБ</option><option value="8192">8 ГБ</option>
+            <option value="12288">12 ГБ</option><option value="16384">16 ГБ</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div><b>Папка игры</b><small id="game-path-text">…</small></div>
+          <button class="ghost-btn" id="open-game-folder">Открыть</button>
+        </div>
+        <div class="setting-row">
+          <div><b>Лог запуска</b><small>Вывод Minecraft</small></div>
+          <button class="ghost-btn" id="toggle-log">Показать</button>
+        </div>
+      </div>
+
+      <div class="log-box" id="log-box" hidden></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "name": "beevisual-launcher",
+  "productName": "BeeVisual Launcher",
+  "version": "1.0.0",
+  "description": "BeeVisual — лаунчер для Minecraft 1.21.4 с визуалами и модами",
+  "main": "main.js",
+  "author": "BeeVisual",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "adm-zip": "^0.5.10"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "com.beevisual.launcher",
+    "productName": "BeeVisual Launcher",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  },
+  "allowScripts": {
+    "electron@28.3.3": true
+  }
+}
