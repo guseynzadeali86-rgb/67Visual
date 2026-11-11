@@ -52,7 +52,7 @@ public class CustomTitleScreen extends TitleScreen {
         // custom background image if the resource exists
         if (this.client.getResourceManager().getResource(BACKGROUND).isPresent()) {
             RenderSystem.setShaderTexture(0, BACKGROUND);
-            context.drawTexture(RenderLayer::getTextured, BACKGROUND, 0, 0, 0.0F, 0.0F, this.width, this.height, this.width, this.height);
+            context.drawTexture(RenderLayer::getEntitySolid, BACKGROUND, 0, 0, 0.0F, 0.0F, this.width, this.height, this.width, this.height);
         }
 
         super.render(context, mouseX, mouseY, delta);
