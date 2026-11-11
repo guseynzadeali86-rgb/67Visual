@@ -588,7 +588,12 @@ ipcMain.handle('launch:start', async (_e, opts = {}) => {
     fs.mkdirSync(nativesDir, { recursive: true });
 
     const vanillaLibs = (versionJson.libraries || []).filter(lib => ruleAllows(lib.rules));
-    const cp = [clientJar, ...buildClasspath(vanillaLibs, fabLibs, paths().libraries)];
+    let cp = [clientJar, ...buildClasspath(vanillaLibs, fabLibs, paths().libraries)];
+        // Remove older ASM version if newer present to avoid duplicate classes
+        const hasAsm97 = cp.some(p => p.includes('asm-9.7.1.jar'));
+        if (hasAsm97) {
+          cp = cp.filter(p => !p.includes('asm-9.6.jar'));
+        }
     const args = [
       `-Xmx${ram}M`, '-Xms512M', '-XX:+UseG1GC', '-XX:+ParallelRefProcEnabled',
       '-XX:MaxGCPauseMillis=200', '-XX:+UnlockExperimentalVMOptions', '-XX:+DisableExplicitGC',

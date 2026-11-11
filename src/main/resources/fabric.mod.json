@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "beevisual-ui",
+  "version": "1.0.0",
+  "name": "BeeVisual UI",
+  "description": "Custom main menu for Minecraft in BeeVisual purple style",
+  "authors": ["BeeVisual"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/beevisual-icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.beevisual.menu.ModMain"]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
