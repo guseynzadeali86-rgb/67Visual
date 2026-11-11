@@ -1,56 +1,59 @@
 package com.beevisual.menu;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class CustomTitleScreen extends TitleScreen {
-    private static final Identifier BACKGROUND = new Identifier("beevisual", "textures/gui/background.png");
-    private static final int PANEL_WIDTH = 400;
-    private static final int PANEL_HEIGHT = 300;
+    private static final Identifier BACKGROUND = Identifier.of("beevisual", "textures/gui/background.png");
+    private static final int BTN_WIDTH = 200;
+    private static final int BTN_HEIGHT = 20;
+    private static final int GAP = 6;
 
-    public CustomTitleScreen(TitleScreen original) {
-        super(null);
-        // Preserve original screen properties if needed
+    public CustomTitleScreen() {
+        super(false);
     }
 
     @Override
     public void init() {
         super.init();
-        // Remove default buttons
         this.clearChildren();
-        int centerX = this.width / 2;
-        int startY = (this.height - PANEL_HEIGHT) / 2 - 20;
-        int btnW = 180;
-        int btnH = 20;
-        int gap = 4;
+
         String[] labels = {"Singleplayer", "Multiplayer", "Settings", "Quit"};
+        int totalHeight = labels.length * BTN_HEIGHT + (labels.length - 1) * GAP;
+        int startY = (this.height - totalHeight) / 2 + 10;
+
         for (int i = 0; i < labels.length; i++) {
-            int y = startY + i * (btnH + gap);
-            this.addDrawableChild(new ButtonWidget(centerX - btnW/2, y, btnW, btnH,
-                    Text.translatable(labels[i].toLowerCase()), button -> {
-                switch (labels[i]) {
-                    case "Singleplayer": this.client.setScreen(new net.minecraft.client.gui.screen.world.SelectWorldScreen(this)); break;
-                    case "Multiplayer": this.client.setScreen(new net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen(this)); break;
-                    case "Settings": this.client.setScreen(new net.minecraft.client.gui.screen.option.OptionsScreen(this, this.client.options)); break;
-                    case "Quit": this.client.scheduleStop(); break;
+            int y = startY + i * (BTN_HEIGHT + GAP);
+            final String label = labels[i];
+            this.addDrawableChild(ButtonWidget.builder(Text.translatable(label.toLowerCase()), button -> {
+                switch (label) {
+                    case "Singleplayer" -> this.client.setScreen(new SelectWorldScreen(this));
+                    case "Multiplayer" -> this.client.setScreen(new MultiplayerScreen(this));
+                    case "Settings" -> this.client.setScreen(new OptionsScreen(this, this.client.options));
+                    case "Quit" -> this.client.scheduleStop();
                 }
-            }));
+            }).dimensions(this.width / 2 - BTN_WIDTH / 2, y, BTN_WIDTH, BTN_HEIGHT).build());
         }
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        // draw background gradient
-        fill(matrices, 0, 0, this.width, this.height, 0xFF281050);
-        // draw custom background image if present
-        if (this.client.getTextureManager().getTexture(BACKGROUND) != null) {
-            this.client.getTextureManager().bindTexture(BACKGROUND);
-            DrawableHelper.drawTexture(matrices, (this.width - PANEL_WIDTH)/2, (this.height - PANEL_HEIGHT)/2 - 20, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        // purple background
+        context.fill(0, 0, this.width, this.height, 0xFF281050);
+
+        // custom background image if the resource exists
+        if (this.client.getResourceManager().getResource(BACKGROUND).isPresent()) {
+            RenderSystem.setShaderTexture(0, BACKGROUND);
+            context.drawTexture(BACKGROUND, 0, 0, 0.0F, 0.0F, this.width, this.height, this.width, this.height);
         }
-        super.render(matrices, mouseX, mouseY, delta);
+
+        super.render(context, mouseX, mouseY, delta);
     }
 }
