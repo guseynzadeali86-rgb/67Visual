@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.5-SNAPSHOT'
+    id 'fabric-loom' version '1.9.2'
 }
 
 version = '1.0.0'
@@ -35,4 +35,9 @@ tasks.withType(JavaCompile).configureEach {
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType(JavaExec).configureEach {
+    // avoids the "unknown invokedynamic bsm" noise from the Loom agent
+    jvmArgs '-XX:+IgnoreUnrecognizedVMOptions'
 }
