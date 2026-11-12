@@ -85,17 +85,21 @@ public class CustomTitleScreen extends TitleScreen {
         buttons.clear();
 
         // Buttons are placed where the asset pack's preview puts them
-        // (left column, vertically centred).
-        int startY = (int) (this.height * 0.5f) - (4 * BTN_H + 3 * BTN_GAP) / 2;
-        int x = (int) (this.width * 0.5f) - BTN_W / 2;
+        // (centered vertically, roughly 75% width).
+        float btnW = this.width * 0.75f;
+        float btnH = this.height * 0.07f;
+        float btnGap = this.height * 0.03f;
 
-        addButton(x, startY + 0 * (BTN_H + BTN_GAP), "singleplayer", "Одиночная игра",
+        int startY = (int) (this.height * 0.5f) - (4 * btnH + 3 * btnGap) / 2;
+        int x = (int) (this.width * 0.5f) - btnW / 2;
+
+        addButton(x, startY + 0 * (btnH + btnGap), "singleplayer", "Одиночная игра",
                 () -> this.client.setScreen(new SelectWorldScreen(this)));
-        addButton(x, startY + 1 * (BTN_H + BTN_GAP), "multiplayer", "Мультиплеер",
+        addButton(x, startY + 1 * (btnH + btnGap), "multiplayer", "Мультиплеер",
                 () -> this.client.setScreen(new MultiplayerScreen(this)));
-        addButton(x, startY + 2 * (BTN_H + BTN_GAP), "options", "Настройки",
+        addButton(x, startY + 2 * (btnH + btnGap), "options", "Настройки",
                 () -> this.client.setScreen(new OptionsScreen(this, this.client.options)));
-        addButton(x, startY + 3 * (BTN_H + BTN_GAP), "quit", "Выход",
+        addButton(x, startY + 3 * (btnH + btnGap), "quit", "Выход",
                 () -> this.client.scheduleStop());
     }
 
