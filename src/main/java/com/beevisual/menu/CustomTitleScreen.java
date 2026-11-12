@@ -191,7 +191,6 @@ public class CustomTitleScreen extends TitleScreen {
         } else {
             context.getMatrices().push();
             context.getMatrices().translate(this.width / 2f, this.height * 0.16f, 0);
-            context.getMatrices().scale(3.0f, 3.0f, 1.0f);
             context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("BeeVisual"), 0, 0, TEXT_COLOR);
             context.getMatrices().pop();
         }
@@ -216,7 +215,6 @@ public class CustomTitleScreen extends TitleScreen {
 
             context.getMatrices().push();
             context.getMatrices().translate(b.x() + b.w() / 2f, b.y() + b.h() / 2f, 0);
-            context.getMatrices().scale(2.0f, 2.0f, 1.0f);
             context.drawCenteredTextWithShadow(this.textRenderer, b.label(), 0, 0, TEXT_COLOR);
             context.getMatrices().pop();
         }
