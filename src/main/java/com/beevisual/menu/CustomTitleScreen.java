@@ -43,9 +43,9 @@ public class CustomTitleScreen extends TitleScreen {
     // Layout: the asset pack is built for a 1920x1080 canvas
     private static final int CANVAS_W = 1920;
     private static final int CANVAS_H = 1080;
-    private static final int BTN_W = 300;
-    private static final int BTN_H = 46;
-    private static final int BTN_GAP = 10;
+    private static int BTN_W = 420;
+    private static int BTN_H = 72;
+    private static int BTN_GAP = 24;
 
     private record MenuButton(int x, int y, int w, int h, String key, Text label, Runnable action) {
         boolean contains(double mx, double my) {
@@ -214,8 +214,11 @@ public class CustomTitleScreen extends TitleScreen {
                 context.fill(b.x(), b.y(), b.x() + b.w(), b.y() + b.h(), hovered ? 0xFF9165E8 : 0xFF7C3AED);
             }
 
-            context.drawCenteredTextWithShadow(this.textRenderer, b.label(),
-                    b.x() + b.w() / 2, b.y() + (b.h() - 8) / 2, TEXT_COLOR);
+            context.getMatrices().push();
+            context.getMatrices().translate(b.x() + b.w() / 2f, b.y() + b.h() / 2f, 0);
+            context.getMatrices().scale(2.0f, 2.0f, 1.0f);
+            context.drawCenteredTextWithShadow(this.textRenderer, b.label(), 0, 0, TEXT_COLOR);
+            context.getMatrices().pop();
         }
 
         // --- mouse trail particles ---
