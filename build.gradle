@@ -27,45 +27,9 @@ processResources {
     }
 }
 
-// Copy the GUI assets from the project root into the resources folder
-// (they are named 01_..., 02_... in the root, the mod expects clean names).
-def assetRenames = [
-    '01_background.png'        : 'background.png',
-    '02_logo.png'              : 'logo.png',
-    '03_button_normal.png'     : 'button_normal.png',
-    '03_button_hover.png'      : 'button_hover.png',
-    '03_button_disabled.png'   : 'button_disabled.png',
-    '04_button_singleplayer.png'        : 'button_singleplayer.png',
-    '04_button_singleplayer_hover.png'  : 'button_singleplayer_hover.png',
-    '04_button_multiplayer.png'         : 'button_multiplayer.png',
-    '04_button_multiplayer_hover.png'   : 'button_multiplayer_hover.png',
-    '04_button_options.png'             : 'button_options.png',
-    '04_button_options_hover.png'       : 'button_options_hover.png',
-    '04_button_quit.png'                : 'button_quit.png',
-    '04_button_quit_hover.png'          : 'button_quit_hover.png',
-    '05_icon_language.png'              : 'icon_language.png',
-    '05_icon_language_hover.png'        : 'icon_language_hover.png',
-    '05_icon_accessibility.png'         : 'icon_accessibility.png',
-    '05_icon_accessibility_hover.png'   : 'icon_accessibility_hover.png',
-    '06_traffic_close.png'              : 'traffic_close.png',
-    '06_traffic_minimize.png'           : 'traffic_minimize.png',
-    '06_traffic_zoom.png'               : 'traffic_zoom.png',
-    '07_text_field.png'                 : 'text_field.png',
-    '07_text_field_focus.png'           : 'text_field_focus.png',
-    '08_slider.png'                     : 'slider.png',
-    '08_slider_hover.png'               : 'slider_hover.png'
-]
-
 tasks.register('copyAssets', Copy) {
-    from rootProject.projectDir
-    include assetRenames.keySet()
+    from 'assets/beevisual/textures/gui'
     into layout.projectDirectory.dir('src/main/resources/assets/beevisual/textures/gui')
-    eachFile { details ->
-        def target = assetRenames[details.name]
-        if (target != null) {
-            details.name = target
-        }
-    }
     doLast {
         println 'Copied GUI assets to src/main/resources/assets/beevisual/textures/gui'
     }
