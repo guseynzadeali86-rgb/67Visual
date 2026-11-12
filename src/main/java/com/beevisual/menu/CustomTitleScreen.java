@@ -86,9 +86,13 @@ public class CustomTitleScreen extends TitleScreen {
 
         // Buttons are placed where the asset pack's preview puts them
         // (centered vertically, roughly 75% width).
-        float btnW = this.width * 0.75f;
-        float btnH = this.height * 0.07f;
-        float btnGap = this.height * 0.03f;
+        float btnW_f = this.width * 0.75f;
+        float btnH_f = this.height * 0.07f;
+        float btnGap_f = this.height * 0.03f;
+
+        int btnW = (int) btnW_f;
+        int btnH = (int) btnH_f;
+        int btnGap = (int) btnGap_f;
 
         int startY = (int) (this.height * 0.5f) - (4 * btnH + 3 * btnGap) / 2;
         int x = (int) (this.width * 0.5f) - btnW / 2;
