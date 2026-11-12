@@ -12,7 +12,8 @@ public class ModMain implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Replace the vanilla title screen with the BeeVisual one as soon as it appears
+        // Fallback for title screens created after startup. The primary replacement
+        // happens in MinecraftClientMixin before vanilla can display the screen.
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.currentScreen instanceof TitleScreen
                     && !(client.currentScreen instanceof CustomTitleScreen)) {
