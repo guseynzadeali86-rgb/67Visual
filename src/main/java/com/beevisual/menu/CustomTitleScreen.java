@@ -40,12 +40,12 @@ public class CustomTitleScreen extends TitleScreen {
     private static final int GRADIENT_BOTTOM = 0xFF150B2B;
     private static final int TEXT_COLOR = 0xFFF5F3FF;
 
-    // Layout: the asset pack is built for a 1920x1080 canvas
-    private static final int CANVAS_W = 1920;
-    private static final int CANVAS_H = 1080;
-    private static int BTN_W = 420;
-    private static int BTN_H = 72;
-    private static int BTN_GAP = 24;
+            // Layout: the asset pack is built for a 1920x1080 canvas
+        private static final int CANVAS_W = 1920;
+        private static final int CANVAS_H = 1080;
+        private static int BTN_W = 420;
+        private static int BTN_H = 72;
+        private static int BTN_GAP = 24;
 
     private record MenuButton(int x, int y, int w, int h, String key, Text label, Runnable action) {
         boolean contains(double mx, double my) {
