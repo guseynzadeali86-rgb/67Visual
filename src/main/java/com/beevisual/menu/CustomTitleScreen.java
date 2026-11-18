@@ -80,12 +80,12 @@ public class CustomTitleScreen extends TitleScreen {
     protected void init() {
         buttons.clear();
 
-        // Vanilla-style button layout: centered, big clickable area, text already on asset.
-        btnW = (int) (this.width * 0.34f);
-        btnH = (int) (this.height * 0.09f);
-        int btnGap = (int) (this.height * 0.03f);
+        // Fixed button size so the button textures are not stretched.
+        btnW = 420;
+        btnH = 70;
+        int btnGap = 20;
 
-        int startY = (int) (this.height * 0.45f) - (4 * btnH + 3 * btnGap) / 2;
+        int startY = (this.height - (4 * btnH + 3 * btnGap)) / 2;
         int x = (this.width - btnW) / 2;
 
         addButton(x, startY + 0 * (btnH + btnGap), "singleplayer", "Одиночная игра",
