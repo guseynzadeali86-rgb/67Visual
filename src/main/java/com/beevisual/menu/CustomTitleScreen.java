@@ -40,12 +40,8 @@ public class CustomTitleScreen extends TitleScreen {
     private static final int GRADIENT_BOTTOM = 0xFF150B2B;
     private static final int TEXT_COLOR = 0xFFF5F3FF;
 
-            // Layout: the asset pack is built for a 1920x1080 canvas
-        private static final int CANVAS_W = 1920;
-        private static final int CANVAS_H = 1080;
-        private static int BTN_W = 420;
-        private static int BTN_H = 72;
-        private static int BTN_GAP = 24;
+    private int btnW;
+    private int btnH;
 
     private record MenuButton(int x, int y, int w, int h, String key, Text label, Runnable action) {
         boolean contains(double mx, double my) {
@@ -84,18 +80,13 @@ public class CustomTitleScreen extends TitleScreen {
     protected void init() {
         buttons.clear();
 
-        // Buttons are placed where the asset pack's preview puts them
-        // (centered vertically, roughly 75% width).
-        float btnW_f = this.width * 0.75f;
-        float btnH_f = this.height * 0.07f;
-        float btnGap_f = this.height * 0.03f;
+        // Vanilla-style button layout: centered, big clickable area, text already on asset.
+        btnW = (int) (this.width * 0.34f);
+        btnH = (int) (this.height * 0.09f);
+        int btnGap = (int) (this.height * 0.03f);
 
-        int btnW = (int) btnW_f;
-        int btnH = (int) btnH_f;
-        int btnGap = (int) btnGap_f;
-
-        int startY = (int) (this.height * 0.5f) - (4 * btnH + 3 * btnGap) / 2;
-        int x = (int) (this.width * 0.5f) - btnW / 2;
+        int startY = (int) (this.height * 0.45f) - (4 * btnH + 3 * btnGap) / 2;
+        int x = (this.width - btnW) / 2;
 
         addButton(x, startY + 0 * (btnH + btnGap), "singleplayer", "Одиночная игра",
                 () -> this.client.setScreen(new SelectWorldScreen(this)));
@@ -108,7 +99,7 @@ public class CustomTitleScreen extends TitleScreen {
     }
 
     private void addButton(int x, int y, String key, String label, Runnable action) {
-        buttons.add(new MenuButton(x, y, BTN_W, BTN_H, key, Text.literal(label), action));
+        buttons.add(new MenuButton(x, y, btnW, btnH, key, Text.literal(label), action));
     }
 
     private Identifier buttonTexture(String key, boolean hovered) {
@@ -220,11 +211,6 @@ public class CustomTitleScreen extends TitleScreen {
             } else {
                 context.fill(b.x(), b.y(), b.x() + b.w(), b.y() + b.h(), hovered ? 0xFF9165E8 : 0xFF7C3AED);
             }
-
-            context.getMatrices().push();
-            context.getMatrices().translate(b.x() + b.w() / 2f, b.y() + b.h() / 2f, 0);
-            context.drawCenteredTextWithShadow(this.textRenderer, b.label(), 0, 0, TEXT_COLOR);
-            context.getMatrices().pop();
         }
 
         // --- mouse trail particles ---
@@ -251,8 +237,6 @@ public class CustomTitleScreen extends TitleScreen {
         }
 
         // --- corner info ---
-        context.drawTextWithShadow(this.textRenderer, Text.literal("Minecraft 1.21.4"),
-                6, this.height - 14, 0x809CA3AF);
         String modName = "BeeVisual UI";
         context.drawTextWithShadow(this.textRenderer, Text.literal(modName),
                 this.width - 6 - this.textRenderer.getWidth(modName), this.height - 14, 0x809CA3AF);
